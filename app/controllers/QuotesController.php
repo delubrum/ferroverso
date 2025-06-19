@@ -34,9 +34,9 @@ class QuotesController{
         $result[$i]['fecha'] = $r->created_at;
         $result[$i]['cliente'] = $r->client_id;
         $result[$i]['obra'] = $r->product_id;
-        $result[$i]['valor'] = $r->amount;
-        $result[$i]['aui'] = $r->aui;
-        $result[$i]['valor_total'] = $r->total_amount;
+        $result[$i]['valor'] = number_format($r->amount,0);
+        $result[$i]['aui'] = number_format($r->aui,0);
+        $result[$i]['valor_total'] = number_format($r->amount + $r->aui,0);
         $edit = "<a hx-get='?c=Quotes&a=New&id=$r->id' hx-target='#myModal' @click='showModal = true' class='block text-teal-900 hover:text-teal-700 cursor-pointer float-right mx-3'><i class='ri-edit-2-line '></i></a>";
         $result[$i]['acción'] = "$edit";
         $i++;
