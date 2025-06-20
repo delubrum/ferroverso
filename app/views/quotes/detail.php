@@ -1,4 +1,4 @@
-<div @click.outside="if (!nestedModal) showModal = !showModal" class="w-[95%] sm:w-[95%] rounded-lg shadow-lg relative z-50 bg-gray-50 text-gray-800 text-sm leading-relaxed" hx-boost="true">
+<div class="w-[95%] sm:w-[95%] rounded-lg shadow-lg relative z-50 bg-gray-50 text-gray-800 text-sm leading-relaxed" hx-boost="true">
     <!-- Close Button (X) in Top-Right Corner -->
     <button @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-gray-900 hover:text-gray-700">
         <i class="ri-close-line text-2xl"></i>
@@ -9,33 +9,80 @@
             <h1 class="text-xl font-extrabold text-gray-800 mb-2 sm:mb-0">
                 <?php echo "<b>ID:<b> " . $id->id . " | " . $id->client_id . " - " . $id->project ?>
             </h1>
-            <div class="flex flex-wrap gap-3 mr-10 w-full sm:w-auto">
-                <?php if ($id->status != 'Aprobada' or $id->status != 'Perdida'): ?>
-                <button class="px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition-all duration-200 ease-in-out flex items-center justify-center space-x-1.5 shadow-sm hover:shadow-md hover:-translate-y-0.5 bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50"
-                    hx-get="?c=Quotes&a=DetailModal&modal=edit&id=<?= $id->id ?>"
-                    hx-target="#modal-content-wrapper"
-                    hx-swap="innerHTML"
-                    hx-indicator="#loading">
-                    <i class="ri-edit-line text-xs"></i>
-                    <span>Editar</span>
-                </button>
-                <button class="px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition-all duration-200 ease-in-out flex items-center justify-center space-x-1.5 shadow-sm hover:shadow-md hover:-translate-y-0.5 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-                    hx-get="?c=Quotes&a=DetailModal&modal=dispose&id=<?= $id->id ?>"
-                    hx-target="#modal-content-wrapper"
-                    hx-swap="innerHTML">
-                    <i class="ri-delete-bin-line text-xs"></i>
-                    <span>Aprobar</span>
-                </button>
-                <?php endif; ?>
-                <button class="px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition-all duration-200 ease-in-out flex items-center justify-center space-x-1.5 shadow-sm hover:shadow-md hover:-translate-y-0.5 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-                    hx-get="?c=Quotes&a=DetailModal&modal=dispose&id=<?= $id->id ?>"
-                    hx-target="#modal-content-wrapper"
-                    hx-swap="innerHTML">
-                    <i class="ri-delete-bin-line text-xs"></i>
-                    <span>Modificar</span>
-                </button>
+
+
+            <?php if ($id->status != 'ganada' && $id->status != 'perdida' && $id->status != 'modificada'): ?>
+            <div x-data="{ open: false }" class="relative mr-10">
+            <button @click="open = !open"
+                class="text-sm px-4 py-2 bg-gray-800 text-white rounded-md shadow hover:bg-gray-700 focus:outline-none">
+                <i class="ri-menu-line"></i> Opciones
+            </button>
+
+            <div x-show="open" @click.outside="open = false"
+                class="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                <ul class="py-1 text-sm text-gray-700">
+                    <?php if ($id->status != 'ganada' && $id->status != 'perdida' && $id->status != 'modificada'): ?>
+                    <!-- <li>
+                        <a href="#"
+                            hx-get="?c=Quotes&a=New&id=<?= $id->id ?>"
+                            hx-target="#myModal"
+                            hx-indicator="#loading"
+                            @click="showModal = true; open = false"
+                            class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                            <i class="ri-edit-line"></i> Editar
+                        </a>
+                    </li> -->
+                    <?php endif; ?>
+                    <?php if ($id->status === 'costeo'): ?>
+                    <li>
+                        <a href="#"
+                            hx-get="?c=Quotes&a=New&status=seguimiento&id=<?= $id->id ?>"
+                            hx-target="#myModal"
+                            hx-indicator="#loading"
+                            @click="showModal = true; open = false"
+                            class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                            <i class="ri-edit-line"></i> Costear
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    <?php if ($id->status === 'seguimiento'): ?>
+                    <li>
+                        <a href="#"
+                            hx-get="?c=Quotes&a=New&status=modificada&id=<?= $id->id ?>"
+                            hx-target="#myModal"
+                            hx-indicator="#loading"
+                            @click="showModal = true; open = false"
+                            class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                            <i class="ri-edit-line"></i> Modificar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            hx-get="?c=Quotes&a=New&status=ganada&id=<?= $id->id ?>"
+                            hx-target="#myModal"
+                            hx-indicator="#loading"
+                            @click="showModal = true; open = false"
+                            class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                            <i class="ri-edit-line"></i> Ganada
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            hx-get="?c=Quotes&a=New&status=perdida&id=<?= $id->id ?>"
+                            hx-target="#myModal"
+                            hx-indicator="#loading"
+                            @click="showModal = true; open = false"
+                            class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                            <i class="ri-edit-line"></i> Perdida
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                </ul>
             </div>
+            </div>
+            <?php endif; ?>
         </div>
+        
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
             <div class="bg-white rounded-lg shadow-md overflow-hidden lg:col-span-1">
@@ -96,7 +143,12 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden lg:col-span-3">
                 <div class="flex border-b border-gray-200 bg-white px-3 flex-wrap">
 
-                    <div class="tab px-3 py-2.5 cursor-pointer font-medium text-gray-500 transition-colors duration-200 hover:text-gray-800 whitespace-nowrap"
+                    <div class="tab active text-gray-800 border-gray-800 border-b-2 px-3 py-2.5 cursor-pointer font-medium text-gray-500 transition-colors duration-200 hover:text-gray-800 whitespace-nowrap"
+                        hx-get="?c=Quotes&a=DetailTab&tab=comments&id=<?= $id->id ?>"
+                        hx-target="#tabContentContainer">Comentarios
+                    </div>
+
+                    <!-- <div class="tab px-3 py-2.5 cursor-pointer font-medium text-gray-500 transition-colors duration-200 hover:text-gray-800 whitespace-nowrap"
                         hx-get="?c=Quotes&a=DetailTab&tab=materials&id=<?= $id->id ?>"
                         hx-target="#tabContentContainer">Materiales
                     </div>
@@ -104,16 +156,11 @@
                     <div class="tab px-3 py-2.5 cursor-pointer font-medium text-gray-500 transition-colors duration-200 hover:text-gray-800 whitespace-nowrap"
                         hx-get="?c=Quotes&a=DetailTab&tab=documents&id=<?= $id->id ?>"
                         hx-target="#tabContentContainer">Documentos
-                    </div>
-
-                    <div class="tab px-3 py-2.5 cursor-pointer font-medium text-gray-500 transition-colors duration-200 hover:text-gray-800 whitespace-nowrap"
-                        hx-get="?c=Quotes&a=DetailTab&tab=comments&id=<?= $id->id ?>"
-                        hx-target="#tabContentContainer">Comentarios
-                    </div>
+                    </div> -->
                 </div>
 
                 <div id="tabContentContainer" class="p-4"
-                    hx-get="?c=Quotes&a=DetailTab&tab=materials&id=<?= $id->id ?>"
+                    hx-get="?c=Quotes&a=DetailTab&tab=comments&id=<?= $id->id ?>"
                     hx-trigger="load"
                     hx-target="this">
                 </div>
@@ -149,34 +196,6 @@
                 firstTab.classList.add('border-gray-800');
                 firstTab.classList.add('border-b-2');
             }
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const tabs = document.querySelectorAll(".tab");
-            const tabContentContainer = document.getElementById("tabContentContainer");
-
-            // Leer el último tab de localStorage
-            const lastTab = localStorage.getItem("lastSelectedTab");
-
-            // Activar el tab guardado o el primero por defecto
-            let tabToActivate = tabs[0]; // por defecto
-            if (lastTab) {
-                const savedTab = Array.from(tabs).find(t => t.dataset.tab === lastTab);
-                if (savedTab) tabToActivate = savedTab;
-            }
-
-            // Simula el clic inicial para cargar el contenido
-            if (tabToActivate) tabToActivate.click();
-
-            // Guardar el tab cuando se hace clic
-            tabs.forEach(tab => {
-                tab.addEventListener("click", function () {
-                    const selectedTab = tab.dataset.tab;
-                    if (selectedTab) {
-                        localStorage.setItem("lastSelectedTab", selectedTab);
-                    }
-                });
-            });
         });
         </script>
 

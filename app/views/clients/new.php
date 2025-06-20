@@ -1,9 +1,9 @@
-<div @click.outside="showModal = false" class="w-[95%] sm:w-[90%] bg-white p-4 rounded-lg shadow-lg relative z-50">
+<div class="w-[95%] sm:w-[70%] bg-white p-4 rounded-lg shadow-lg relative z-50">
     <!-- Close Button (X) in Top-Right Corner -->
-    <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
+    <button id="closeNewModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-gray-900 hover:text-gray-700">
         <i class="ri-close-line text-2xl"></i>
     </button>
-    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold"> <?php echo (isset($id)) ? 'Editar' : 'Nuevo'; ?> Cliente <span></h1>
+    <h1 class="mb-4 text-gray-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold"> <?php echo (isset($id)) ? 'Editar' : 'Nuevo'; ?> Cliente <span></h1>
     <form  id="newForm" 
         class="overflow-y-auto max-h-[600px] p-4"
         hx-post='?c=Clients&a=Save' 
@@ -12,14 +12,14 @@
         hx-indicator="#loading"
     >
       <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
-      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
             <label for="company" class="block text-gray-600 text-sm mb-1">Compañia</label>
-            <input type="text" id="company" name="company" value="<?php echo isset($id) ? $id->company : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+            <input type="text" id="company" name="company" value="<?php echo isset($id) ? $id->company : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
         </div>
         <div>
             <label for="city" class="block text-gray-600 text-sm mb-1">Ciudad</label>
-            <input type="text" id="city" name="city" value="<?php echo isset($id) ? $id->city : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+            <input type="text" id="city" name="city" value="<?php echo isset($id) ? $id->city : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
         </div>
       </div>
 
@@ -29,7 +29,7 @@
 
       <div class="mt-6 flex justify-end">
         <button type="submit" 
-        class="text-xl float-left text-teal-900 px-4 py-2 font-bold hover:text-teal-700"
+        class="text-xl float-left text-gray-900 px-4 py-2 font-bold hover:text-gray-700"
         >
           <i class="ri-save-line"></i> <?php echo (isset($id)) ? 'Actualizar' : 'Guardar'; ?>
         </button>

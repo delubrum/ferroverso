@@ -15,6 +15,12 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+    <?php if(isset($jspreadsheet)) { ?>
+      <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+      <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+      <script src="https://jsuites.net/v4/jsuites.js"></script>
+      <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <?php } ?>
     <?php if(isset($tabulator)) { ?>
       <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
       <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
@@ -63,7 +69,15 @@
 
       htmx.on('listChanged', function(event) {
         // table.setPage(table.getPage());
-        table.replaceData();
+        table.replaceData().then(() => {
+          htmx.process(document.querySelector('#list'));
+        });
+      });
+
+      htmx.on('tableChanged', function(event) {
+        table.setPage(table.getPage()).then(() => {
+          htmx.process(document.querySelector('#list'));
+        });
       });
     </script>
   </body>

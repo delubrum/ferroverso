@@ -1,29 +1,29 @@
 <div>
     <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center space-x-1.5">
         <i class="ri-chat-3-line text-xl"></i>
-        <span>Comments</span>
+        <span>Comentarios</span>
     </h2>
 
     <form 
-    hx-post="?c=Assets&a=SaveEvent"
+    hx-post="?c=Quotes&a=SaveComment"
+    hx-on::after-request="htmx.trigger('#search-results', 'refresh')"
     hx-indicator="#loading"
     class="flex items-center space-x-2 mb-8"
     >
-        <input type="hidden" name="asset_id" value="<?= isset($id) ? $id->asset_id : '' ?>">
-        <input type="hidden" name="type" value="comment">
-        <input type="text" name="notes" id="newCommentInput" 
+        <input type="hidden" name="quote_id" value="<?= isset($id) ? $id->id : '' ?>">
+        <input type="text" name="notes"
         class="flex-grow px-3 py-2 border border-gray-300 rounded-md text-xs text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500" 
-        placeholder="Add new comment..."
+        placeholder="Escribe un comentario..."
         >
         <button type="submit" class="px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition-all duration-200 ease-in-out flex items-center justify-center space-x-1.5 shadow-sm hover:shadow-md hover:-translate-y-0.5 bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
-            <span>Send</span>
+            <i class="ri-send-plane-line"></i> <span>Enviar</span>
         </button>
     </form>
 
     <input type="search" id="searchEvent" class="w-full px-3 py-2 border border-gray-300 rounded-md text-xs mb-3 shadow-inner focus:outline-none focus:ring-2 focus:ring-gray-500" 
         placeholder="Search..."
         name="search"
-        hx-post="?c=Assets&a=GetEvents&type=comment&id=<?= $id->asset_id ?>"
+        hx-post="?c=Quotes&a=GetComments&id=<?= $id->id ?>"
         hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
         hx-target="#search-results"
         hx-indicator="#searching">
@@ -33,12 +33,12 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
         </svg>
-        <span>Searching...</span>
+        <span>Buscando...</span>
     </div>
 
     <div id="search-results" 
-        hx-get="?c=Assets&a=GetEvents&type=comment&id=<?= $id->asset_id ?>"
-        hx-trigger="load"
+        hx-get="?c=Quotes&a=GetComments&id=<?= $id->id ?>"
+        hx-trigger="load, refresh"
         hx-target="this">
     </div>
 </div>

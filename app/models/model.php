@@ -59,11 +59,10 @@ class Model {
         }
         $vals = rtrim($vals, ",");
         try {
-            $sql = "UPDATE $table 
-                SET $vals 
-                WHERE id = '$id'";
+            $sql = "UPDATE $table SET $vals WHERE id = '$id'";
+            $this->pdo->prepare($sql)->execute();
             $this->log($sql);
-            return $this->pdo->prepare($sql)->execute();
+            return $id;
         } catch (Exception $e) {
             die($e->getMessage());
         }
@@ -138,19 +137,29 @@ class Model {
 
         if (empty($_SESSION["id-APP"])) {
             header('Location: ?c=Home&a=Index&m=Index');
-            exit; // Importante para detener la ejecución
-        } else {
-            $filter = "and id = " . $_SESSION["id-APP"];
-            $user = $this->get('*', 'users', $filter);
+            exit;
         }
 
-        if (!in_array($permission, json_decode($user->permissions, true))) {
+        // Verifica que el usuario exista y esté activo
+        $filter = "and status = 1 and id = " . (int)$_SESSION["id-APP"];
+        $user = $this->get('*', 'users', $filter);
+
+        if (!$user) {
+            // Usuario no encontrado o inactivo
+            header('Location: ?c=Home&a=Index&m=Index');
+            exit;
+        }
+
+        $permissions = json_decode($user->permissions ?? '[]', true);
+
+        if (!is_array($permissions) || !in_array($permission, $permissions)) {
             header("Location: 403.php");
             exit;
         }
 
         return $user;
     }
+
 
     public function getToken($length)
     {

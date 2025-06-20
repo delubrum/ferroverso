@@ -11,10 +11,19 @@ class HomeController{
 	public function Index() {
 		require_once "lib/auth.php";
 		if ($isLoggedIn) {
-			require_once "lib/check.php";
-      $title = "Bienvenido a Sipec";
-      $content = 'app/components/page.php';
-      require_once 'app/views/index.php';
+			if(!isset($_SESSION)) { 
+				session_start(); 
+			}
+			if (empty($_SESSION["id-APP"])) {
+				header('Location: ?c=Home&a=Index&m=Index');
+			}
+			else {
+			$filter = "and id = " . $_SESSION["id-APP"];
+			$user = $this->model->get('*','users',$filter);
+			}
+			$title = "Bienvenido a Sipec";
+			$content = 'app/components/page.php';
+			require_once 'app/views/index.php';
 		} else {
 			if (isset($_REQUEST['pass']) && $_REQUEST['pass'] !== '') {
 				$isAuthenticated = false;

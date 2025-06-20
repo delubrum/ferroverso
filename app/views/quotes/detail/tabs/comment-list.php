@@ -9,7 +9,7 @@
                         <div class="flex-grow bg-gray-50 p-3 rounded-md border border-gray-200">
                             <div class="flex justify-between items-center mb-1.5">
                                 <div class="font-semibold text-sm text-gray-900"><?= $r->username ?></div>
-                                <div class="text-xs text-gray-600"><?= $r->date ?></div>
+                                <div class="text-xs text-gray-600"><?= $r->created_at ?></div>
                             </div>
                             <div class="text-xs leading-relaxed text-gray-800"><?= $r->notes ?></div>
                         </div>
@@ -19,7 +19,7 @@
         <?php endforeach; ?>
 
         <div 
-            hx-post="?c=Assets&a=GetEvents&type=comment&page=<?= $page ?>&id=<?= $r->asset_id ?>"
+            hx-post="?c=Quotes&a=GetComments&page=<?= $page ?>&id=<?= $r->quote_id ?>"
             hx-trigger="revealed"
             hx-swap="beforeend"
             hx-include="#searchEvent"
@@ -32,9 +32,9 @@
 <?php else: ?>
     <div class="py-4 text-center text-gray-500">
         <?php if (!empty($search)): ?>
-            No more items found matching your search.
+            No se encuentras mas items para la busqueda.
         <?php else: ?>
-            No more items available.
+            No se encuentran mas items.
         <?php endif; ?>
     </div>
 <?php endif; ?>

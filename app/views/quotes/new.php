@@ -1,4 +1,4 @@
-<div @click.outside="showModal = false" class="w-[95%] sm:w-[25%] bg-white p-4 rounded-lg shadow-lg relative z-50">
+<div class="w-[95%] sm:w-[25%] bg-white p-4 rounded-lg shadow-lg relative z-50">
     <!-- Close Button (X) in Top-Right Corner -->
     <button id="closeNewModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-gray-900 hover:text-gray-700">
         <i class="ri-close-line text-2xl"></i>
@@ -11,7 +11,11 @@
         hx-indicator="#loading"
     >
       <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
+      <input type='hidden' name='status' value='<?= $status ?>'>
       <div class="grid grid-cols-1">
+
+        <? if ($status != 'seguimiento' && $status != 'ganada' && $status != 'perdida' && $status != 'modificada') : ?>
+
         <div>
           <label for="client_id" class="block text-gray-600 text-sm mt-4">Cliente</label>
           <select id="client_id" name="client_id" class="tomselect w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
@@ -27,6 +31,10 @@
             <input type="text" id="project" name="project" value="<?php echo isset($id) ? $id->amount : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
         </div>
 
+        <? endif; ?>
+
+        <? if ($status && $status != 'perdida') : ?>
+
         <div>
             <label for="amount" min="1" class="block text-gray-600 text-sm mt-4">Valor Antes de Intereses</label>
             <input type="number" id="amount" name="amount" value="<?php echo isset($id) ? $id->amount : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
@@ -36,6 +44,14 @@
             <label for="aui" min="1" class="block text-gray-600 text-sm mt-4">AUI</label>
             <input type="number" id="aui" name="aui" value="<?php echo isset($id) ? $id->aui : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
         </div>
+
+        <? endif; ?>
+
+        <div>
+            <label for="notes" class="block text-gray-600 text-sm mt-4">Notas</label>
+            <textarea id="notes" name="notes" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none"><?php echo isset($id) ? $id->notes : '' ?></textarea>
+        </div>
+
       </div>
 
       <div class="mt-6 flex justify-end">

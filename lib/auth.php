@@ -39,12 +39,13 @@ else if (!empty($_COOKIE["user_login"]) && !empty($_COOKIE["random_password"]) &
     if (!empty($userToken->id) && $isPasswordVerified && $isSelectorVerified && $isExpiryDateVerified) {
       $isLoggedIn = true;
       $user = $model->get('id,password,lang','users'," and email = '$userToken->email' and status = '1'");
+      if($user) {
       session_start();
       $_SESSION["id-APP"] = $user->id;
       session_write_close();
-      $load_lang = $user->lang;
-      $lang_json = file_get_contents("app/assets/lang/".$load_lang.".json");
-      $lang = json_decode($lang_json, true);
+      } else {
+        $model->clearAuthCookie();
+      }
     } else {
       if(!empty($userToken->id)) {
         $item = new stdClass();
