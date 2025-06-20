@@ -131,8 +131,25 @@ class Model {
         }
     }
 
-    public function redirect() {
-        header("location: 403.php");
+    public function auth($permission) {
+        if (!isset($_SESSION)) { 
+            session_start(); 
+        }
+
+        if (empty($_SESSION["id-APP"])) {
+            header('Location: ?c=Home&a=Index&m=Index');
+            exit; // Importante para detener la ejecución
+        } else {
+            $filter = "and id = " . $_SESSION["id-APP"];
+            $user = $this->get('*', 'users', $filter);
+        }
+
+        if (!in_array($permission, json_decode($user->permissions, true))) {
+            header("Location: 403.php");
+            exit;
+        }
+
+        return $user;
     }
 
     public function getToken($length)

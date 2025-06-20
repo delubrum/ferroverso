@@ -9,7 +9,9 @@ class ClientsController{
 
   public function Index(){
     require_once "lib/check.php";
-    if (in_array(2, $permissions)) {
+    if (in_array(2, json_decode($user->permissions, true)
+
+)) {
       $title = "Configuración / Clientes";
       $fields = array("compañia","ciudad","contactos","obras","acción");
       $url = '?c=Clients&a=Data';
@@ -26,7 +28,9 @@ class ClientsController{
   public function Data(){
     header('Content-Type: application/json');
     require_once "lib/check.php";
-    if (in_array(2, $permissions)) {
+    if (in_array(2, json_decode($user->permissions, true)
+
+)) {
       $result[] = array();
       $i=0;
       foreach($this->model->list('*','clients') as $r) {
@@ -73,7 +77,9 @@ class ClientsController{
 
   public function New(){
     require_once "lib/check.php";
-    if (in_array(2, $permissions)) {
+    if (in_array(2, json_decode($user->permissions, true)
+
+)) {
       if (!empty($_REQUEST['id'])) {
         $filters = "and id = " . $_REQUEST['id'];
         $id = $this->model->get('*','clients', $filters);
@@ -86,7 +92,9 @@ class ClientsController{
 
   public function Save(){
     require_once "lib/check.php";
-    if (in_array(4, $permissions)) {
+    if (in_array(4, json_decode($user->permissions, true)
+
+)) {
       header('Content-Type: application/json');
       $company = $_POST['company'];
       if (empty($_POST['id']) and $this->model->get('id','clients',"and company = '$company'")) {

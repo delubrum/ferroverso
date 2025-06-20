@@ -11,38 +11,28 @@
 		<link href="app/assets/css/styles.css?v=1.0.0" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
-    <?php if(isset($jspreadsheet)) { ?>
-      <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
-      <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
-      <script src="https://jsuites.net/v4/jsuites.js"></script>
-      <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+    <?php if(isset($tabulator)) { ?>
+      <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+      <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     <?php } ?>
-    <?php if(isset($datatables)) { ?>
-      <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
-      <script type="text/javascript" src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
-      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/dataTables.buttons.js"></script>
-      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/buttons.dataTables.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/buttons.html5.min.js"></script>
-      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/buttons.print.min.js"></script>
-      <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/5.0.2/js/dataTables.fixedColumns.js"></script>
-      <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/5.0.2/js/fixedColumns.dataTables.js"></script>
-
-      
-
-
-      <link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.css">
-      <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.1/css/buttons.dataTables.css">
-    <?php } ?>
+    <style>
+    .ts-control {
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+    </style>
 	</head>
   <body x-data='{ showModal: false, nestedModal: false, sidebar: false, showFilters : false }'>
 		<?php require_once "app/components/sidebar.php" ?>
 		<!-- <main class="w-full bg-gray-100 min-h-screen transition-all main active custombg"> -->
     <main class="w-full bg-gray-100 min-h-screen transition-all main active">
 			<?php require_once "app/components/navbar.php" ?>
-			<div id="content">
+			<div id="content" class="pt-2 sm:px-20">
         <div id="loading" class="htmx-indicator pointer-events-none absolute z-[80] h-full w-full top-0 left-0 align-middle bg-gray-50">
             <div class="h-full w-full flex flex-col justify-center place-items-center my-auto">
               <div class="w-24 h-24 bg-no-repeat bg-center bg-[url('app/assets/img/loader.gif')] bg-contain opacity-90"></div>
@@ -56,7 +46,7 @@
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script>
       const notyf = new Notyf({
-        duration: 2000,
+        duration: 3000,
         position: {
           x: 'right',
           y: 'top',
@@ -72,7 +62,8 @@
       });
 
       htmx.on('listChanged', function(event) {
-        table.ajax.reload(null, false);
+        // table.setPage(table.getPage());
+        table.replaceData();
       });
     </script>
   </body>

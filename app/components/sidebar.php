@@ -10,7 +10,9 @@
     <?php
     $current_title = '';
     foreach ($this->model->list('id,attributes,icon,title,subtitle,url', 'permissions', "and type = 'menu' ORDER BY sort,title") as $r) {
-      if (in_array($r->id, $permissions)) {
+      if (in_array($r->id, json_decode($user->permissions, true)
+
+)) {
         isset($_REQUEST['c']) ? $active = "?c=" . $_REQUEST['c'] . "&a=" . $_REQUEST['a'] . "&m=" . $_REQUEST['m'] : $active = '';
         isset($_REQUEST['m']) ? $menu = $_REQUEST['m'] : $menu = '';
         if ($r->title != $current_title) {

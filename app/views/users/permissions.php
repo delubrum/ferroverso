@@ -1,4 +1,6 @@
-<?php if (in_array(1,$permissions)) { ?>
+<?php if (in_array(1,json_decode($user->permissions, true)
+
+)) { ?>
   <div class="w-full">
     <h2 class="text-lg font-semibold text-teal-700">Permisos</h2>
     <div class="overflow-y-auto max-h-[600px] p-4"

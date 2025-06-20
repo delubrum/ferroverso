@@ -11,7 +11,9 @@ class UsersController{
 
   public function Index(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       $title = "Configuración / Usuarios";
       $fields = array("id","date","name","email","status","action");
       $url = '?c=Users&a=Data';
@@ -27,7 +29,9 @@ class UsersController{
 
   public function New(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       require_once 'app/views/users/new.php';
     } else {
       $this->model->redirect();
@@ -37,7 +41,9 @@ class UsersController{
   public function Data(){
     header('Content-Type: application/json');
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       $i=0;
       foreach ($this->model->list("id,createdAt as date,username as name,email,if(status=1,'Activo','Inactivo') as status","users") as $k => $v) {
         $b1 = ($v->status != 'Activo')
@@ -54,12 +60,16 @@ class UsersController{
 
   public function Profile(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions) and isset($_REQUEST["id"])){
+    if (in_array(1, json_decode($user->permissions, true)
+
+) and isset($_REQUEST["id"])){
       $filters = "and id = " . $_REQUEST['id'];
       $id = $this->model->get('*','users',$filters);
       $userPermissions = json_decode($id->permissions, true);
       require_once 'app/views/users/profile.php';
-    } else if (!in_array(1, $permissions) and ($_REQUEST["id"] == $user->id) ){
+    } else if (!in_array(1, json_decode($user->permissions, true)
+
+) and ($_REQUEST["id"] == $user->id) ){
       $id = $user;
       require_once 'app/views/users/profile.php';
     }
@@ -70,7 +80,9 @@ class UsersController{
 
   public function Status(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       $item = new stdClass();
       $item->status = $_REQUEST['status'];
       $id = $_REQUEST['id'];
@@ -85,7 +97,9 @@ class UsersController{
 
   public function Save(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       header('Content-Type: application/json');
       $response = [];
       $item = new stdClass();
@@ -142,19 +156,27 @@ class UsersController{
 
   public function UpdatePermission(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       $userId = $_REQUEST['userId'];
       $pId = $_REQUEST['pId'];
       $action = $_REQUEST['action'];
       $name = $_REQUEST['name'];
       $filters = "and id = $userId";
-      $permissions = json_decode($this->model->get('permissions','users',$filters)->permissions);
+      json_decode($user->permissions, true)
+
+ = json_decode($this->model->get('permissions','users',$filters)->permissions);
       if ($action == 0) {
-        $newArr = array_filter($permissions, function($value) use ($pId) {
+        $newArr = array_filter(json_decode($user->permissions, true)
+
+, function($value) use ($pId) {
           return $value != $pId;
         });
       } else {
-        $newArr = array_merge($permissions, [intval($pId)]);
+        $newArr = array_merge(json_decode($user->permissions, true)
+
+, [intval($pId)]);
       }
       $item = new stdClass();
       sort($newArr);
@@ -176,7 +198,9 @@ class UsersController{
 
   public function Update(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       $item = new stdClass();
       foreach($_POST as $k => $val) {
         if (!empty($val)) {
@@ -202,7 +226,9 @@ class UsersController{
 
   public function UpdatePassword(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       $item = new stdClass();
       $item->password = $_REQUEST['newpass'];
       $cpass = $_REQUEST['cpass'];

@@ -9,7 +9,9 @@ class ProductsController{
 
   public function Index(){
     require_once "lib/check.php";
-    if (in_array(3, $permissions)) {
+    if (in_array(3, json_decode($user->permissions, true)
+
+)) {
       $title = "Configuración / Productos";
       $fields = array("id","nombre","cliente","acción");
       $url = '?c=Products&a=Data';
@@ -25,7 +27,9 @@ class ProductsController{
 
   public function New(){
     require_once "lib/check.php";
-    if (in_array(3, $permissions)) {
+    if (in_array(3, json_decode($user->permissions, true)
+
+)) {
       if (!empty($_REQUEST['id'])) {
         $filters = "and id = " . $_REQUEST['id'];
         $id = $this->model->get('*','products', $filters);
@@ -39,7 +43,9 @@ class ProductsController{
   public function Data(){
     header('Content-Type: application/json');
     require_once "lib/check.php";
-    if (in_array(2, $permissions)) {
+    if (in_array(2, json_decode($user->permissions, true)
+
+)) {
       $result[] = array();
       $i=0;
       foreach($this->model->list('*','products') as $r) {
@@ -59,7 +65,9 @@ class ProductsController{
 
   public function Status(){
     require_once "lib/check.php";
-    if (in_array(1, $permissions)) {
+    if (in_array(1, json_decode($user->permissions, true)
+
+)) {
       $item = new stdClass();
       $item->status = $_REQUEST['status'];
       $id = $_REQUEST['id'];
@@ -74,7 +82,9 @@ class ProductsController{
 
   public function Save(){
     require_once "lib/check.php";
-    if (in_array(3, $permissions)) {
+    if (in_array(3, json_decode($user->permissions, true)
+
+)) {
       header('Content-Type: application/json');
       $name = $_POST['name'];
       if ($this->model->get('id','products',"and name = '$name'")) {
