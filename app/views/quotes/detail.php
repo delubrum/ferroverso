@@ -53,7 +53,7 @@
                             hx-indicator="#loading"
                             @click="showModal = true; open = false"
                             class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
-                            <i class="ri-edit-line"></i> Modificar
+                            <i class="ri-arrow-left-right-line"></i> Modificar
                         </a>
                     </li>
                     <li>
@@ -63,7 +63,7 @@
                             hx-indicator="#loading"
                             @click="showModal = true; open = false"
                             class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
-                            <i class="ri-edit-line"></i> Ganada
+                            <i class="ri-check-double-line"></i> Ganada
                         </a>
                     </li>
                     <li>
@@ -73,7 +73,7 @@
                             hx-indicator="#loading"
                             @click="showModal = true; open = false"
                             class="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
-                            <i class="ri-edit-line"></i> Perdida
+                            <i class="ri-close-line"></i> Perdida
                         </a>
                     </li>
                     <?php endif; ?>
