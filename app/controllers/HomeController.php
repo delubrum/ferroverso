@@ -21,26 +21,7 @@ class HomeController{
 			$filter = "and id = " . $_SESSION["id-APP"];
 			$user = $this->model->get('*','users',$filter);
 			}
-
-			$tabulator = true;
-			$title = "Cotizaciones / Registro";
-			$button = 'Nueva Cotización';
-			$content = 'app/components/list.php';
-			$columns = '[
-				{ "title": "code", "field": "id", visible: false },
-				{ "title": "ID", "field": "code", headerHozAlign: "center", headerFilter:"input" },
-				{ "title": "Fecha", "field": "created_at", headerHozAlign: "center", headerFilter: customDateRangeFilter, headerFilterFunc: customDateFilterFunc, headerFilterLiveFilter: false, },
-				{ "title": "Asesor", "field": "username", headerHozAlign: "center", headerFilter:"input" },
-				{ "title": "Cliente", "field": "company", headerHozAlign: "center", headerFilter:"input" },
-				{ "title": "Obra", "field": "project", headerHozAlign: "center", headerFilter:"input" },
-				{ "title": "Valor", "field": "amount", headerHozAlign: "center", headerFilter:"input", hozAlign:"right", },
-				{ "title": "AUI", "field": "aui", headerHozAlign: "center", headerFilter:"input", hozAlign:"right", },
-				{ "title": "Valor Total", "field": "total", headerHozAlign: "center", headerFilter:"input", hozAlign:"right", },
-				{ "title": "Estado", "field": "status", headerHozAlign: "center", headerFilter:"list", hozAlign:"center", headerFilterParams:{ values: {"costeo": "Costeo", "seguimiento": "Seguimiento", "modificada": "Modificada", "ganada": "Ganada", "perdida": "Perdida"}, clearable:true}, },
-			]';
-			$_REQUEST['c'] = 'Quotes';
-
-			require_once 'app/views/index.php';
+			header("Location: ?c=Quotes&a=Index&m=Cotizaciones");
 		} else {
 			if (isset($_REQUEST['pass']) && $_REQUEST['pass'] !== '') {
 				$isAuthenticated = false;
