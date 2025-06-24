@@ -30,6 +30,7 @@ class QuotesController
             { "title": "Valor Total", "field": "total", headerHozAlign: "center", headerFilter:"input", hozAlign:"right", },
             { "title": "Estado", "field": "status", headerHozAlign: "center", headerFilter:"list", hozAlign:"center", headerFilterParams:{ values: {"costeo": "Costeo", "seguimiento": "Seguimiento", "modificada": "Modificada", "ganada": "Ganada", "perdida": "Perdida"}, clearable:true}, },
         ]';
+        
         require_once 'app/views/index.php';
     }
 
@@ -281,6 +282,10 @@ class QuotesController
                 $item->amount = $this->model->get('amount','quotes'," and id = $id")->amount;
                 $item->aui = $this->model->get('aui','quotes'," and id = $id")->aui;
             }
+            if ($_POST['status'] == 'seguimiento') {
+                $item->quote_at = date("Y-m-d H:i:s");
+            }
+            $item->status_at = date("Y-m-d H:i:s");
             $id = $this->model->update($table, $item, $_POST['id']);
             $text = 'Actualizada';
         }
@@ -383,51 +388,73 @@ class QuotesController
     {
         $user = $this->model->auth(4);
 
-        $in = isset($_REQUEST['in']) ? $_REQUEST['in'] : 1;
         $year = !empty($_REQUEST['year']) ? $_REQUEST['year'] : date('Y');
-        $date = $year . "-01-01";
-
-        $quotes = $this->model->list(
-            "status as status, DATE_FORMAT(created_at, '%b') as month, COUNT(*) as total",
-            "quotes",
-            "and YEAR(created_at) = '$date' GROUP BY created_at, status ORDER BY MONTH(created_at)",
-            ""
-        );
 
         $months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         $quotes_by_month = [];
 
+        // Inicializar array de resultados con todos los meses
         foreach ($months as $month) {
             $quotes_by_month[$month] = [
-                'total'     => 0,
-                'costeo'    => 0,
-                'seguimiento' => 0,
-                'ganadas'   => 0,
-                'perdidas'  => 0,
-                'modificadas'=> 0
+                'total'        => 0,
+                'costeo'       => 0,
+                'seguimiento'  => 0,
+                'ganadas'      => 0,
+                'perdidas'     => 0,
+                'modificadas'  => 0
             ];
         }
 
+        // Total: por created_at
+        $quotes = $this->model->list(
+            "DATE_FORMAT(created_at, '%b') as month, COUNT(*) as total",
+            "quotes",
+            "AND YEAR(created_at) = '$year' GROUP BY month",
+            ""
+        );
         foreach ($quotes as $q) {
-            $month = $q->month;
-            $estado = $q->status;
-            $cantidad = (int)$q->total;
+            $quotes_by_month[$q->month]['total'] = (int) $q->total;
+        }
 
-            $quotes_by_month[$month]['total'] += $cantidad;
+        // Costeo: por created_at
+        $costeo = $this->model->list(
+            "DATE_FORMAT(created_at, '%b') as month, COUNT(*) as total",
+            "quotes",
+            "AND status = 'costeo' AND YEAR(created_at) = '$year' GROUP BY month",
+            ""
+        );
+        foreach ($costeo as $q) {
+            $quotes_by_month[$q->month]['costeo'] = (int) $q->total;
+        }
 
-            if ($estado === 'ganada') {
-                $quotes_by_month[$month]['ganadas'] += $cantidad;
-            } elseif ($estado === 'costeo') {
-                $quotes_by_month[$month]['costeo'] += $cantidad;
-            } elseif ($estado === 'seguimiento') {
-                $quotes_by_month[$month]['seguimiento'] += $cantidad;
-            } elseif ($estado === 'perdida') {
-                $quotes_by_month[$month]['perdidas'] += $cantidad;
-            } else {
-                $quotes_by_month[$month]['modificadas'] += $cantidad;
-            }
+        // Seguimiento: por quote_at
+        $seguimiento = $this->model->list(
+            "DATE_FORMAT(quote_at, '%b') as month, COUNT(*) as total",
+            "quotes",
+            "AND status = 'seguimiento' AND quote_at IS NOT NULL AND YEAR(quote_at) = '$year' GROUP BY month",
+            ""
+        );
+        foreach ($seguimiento as $q) {
+            $quotes_by_month[$q->month]['seguimiento'] = (int) $q->total;
+        }
+
+        // Estados finales: por status_at
+        $finales = $this->model->list(
+            "DATE_FORMAT(status_at, '%b') as month, 
+            SUM(status = 'ganada') as ganadas,
+            SUM(status = 'perdida') as perdidas,
+            SUM(status = 'modificada') as modificadas",
+            "quotes",
+            "AND status IN ('ganada','perdida','modificada') AND YEAR(status_at) = '$year' GROUP BY month",
+            ""
+        );
+        foreach ($finales as $q) {
+            $quotes_by_month[$q->month]['ganadas'] = (int) $q->ganadas;
+            $quotes_by_month[$q->month]['perdidas'] = (int) $q->perdidas;
+            $quotes_by_month[$q->month]['modificadas'] = (int) $q->modificadas;
         }
 
         require_once 'app/views/quotes/indicators/indicators.php';
     }
+
 }
