@@ -7,7 +7,7 @@
     <div class="p-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 pb-2 border-b border-gray-200">
             <h1 class="text-xl font-extrabold text-gray-800 mb-2 sm:mb-0">
-                <?php echo "<b>ID:<b> " . $id->id . " | " . $id->company . " - " . $id->project ?>
+                <?php echo "<b>ID:<b> " . $id->code . " | " . $id->company . " - " . $id->project ?>
             </h1>
 
 
