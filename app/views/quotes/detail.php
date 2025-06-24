@@ -104,16 +104,6 @@
                             <div class="w-24 text-gray-600">Obra:</div>
                             <div class="font-medium text-gray-900"><?= ucwords($id->project) ?></div>
                         </div>
-                        <div class="flex text-xs mb-1">
-                            <div class="w-24 text-gray-600">Creación:</div>
-                            <div class="font-medium text-gray-900"><?= ucwords($id->created_at) ?></div>
-                        </div>
-                        <?php if ($id->status != 'Pendiente') { ?>
-                        <div class="flex text-xs mb-1">
-                            <div class="w-24 text-gray-600"><?= ucwords($id->status) ?>: </div>
-                            <div class="font-medium text-gray-900"><?= ucwords($id->created_at) ?></div>
-                        </div>
-                        <?php } ?>
                     </div>
 
                     <div class="mb-4 pb-2.5 border-b border-dashed border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
