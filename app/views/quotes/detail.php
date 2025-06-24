@@ -7,7 +7,7 @@
     <div class="p-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 pb-2 border-b border-gray-200">
             <h1 class="text-xl font-extrabold text-gray-800 mb-2 sm:mb-0">
-                <?php echo "<b>ID:<b> " . $id->id . " | " . $id->client_id . " - " . $id->project ?>
+                <?php echo "<b>ID:<b> " . $id->id . " | " . $id->company . " - " . $id->project ?>
             </h1>
 
 
@@ -99,7 +99,7 @@
                         <h3 class="text-sm font-semibold text-gray-700 flex items-center space-x-1.5 mb-2"><i class="ri-information-line text-xl"></i> <span>Información Básica</span></h3>
                         <div class="flex text-xs mb-1">
                             <div class="w-24 text-gray-600">Cliente:</div>
-                            <div class="font-medium text-gray-900"><?= ucwords($id->client_id) ?></div>
+                            <div class="font-medium text-gray-900"><?= ucwords($id->company) ?></div>
                         </div>
                         <div class="flex text-xs mb-1">
                             <div class="w-24 text-gray-600">Obra:</div>
@@ -126,7 +126,7 @@
                         </div>
 
                         <div class="flex text-xs mb-1">
-                            <div class="w-24 text-gray-600">AUI: </div>
+                            <div class="w-24 text-gray-600">AIU: </div>
                             <div class="font-medium text-gray-900">$<?= number_format($id->aui,0) ?></div>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                     <div class="mb-4 pb-2.5 border-b border-dashed border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
                         <h3 class="text-sm font-semibold text-gray-700 flex items-center space-x-1.5 mb-2"><i class="ri-shield-user-line text-xl"></i> <span>Asesor</span></h3>
                         <div class="flex text-xs mb-1">
-                            <div class="font-medium text-gray-900"><?= $id->user_id ?></div>
+                            <div class="font-medium text-gray-900"><?= $id->username ?></div>
                         </div>
                     </div>
                 </div>

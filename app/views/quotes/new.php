@@ -36,12 +36,12 @@
         <? if ($status && $status != 'perdida') : ?>
 
         <div>
-            <label for="amount" min="1" class="block text-gray-600 text-sm mt-4">Valor Antes de Intereses</label>
+            <label for="amount" min="1" class="block text-gray-600 text-sm mt-4">Valor Antes de Impuestos</label>
             <input type="number" id="amount" name="amount" value="<?php echo isset($id) ? $id->amount : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
         </div>
 
         <div>
-            <label for="aui" min="1" class="block text-gray-600 text-sm mt-4">AUI</label>
+            <label for="aui" min="1" class="block text-gray-600 text-sm mt-4">AIU</label>
             <input type="number" id="aui" name="aui" value="<?php echo isset($id) ? $id->aui : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-black focus:outline-none" required>
         </div>
 

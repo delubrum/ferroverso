@@ -207,13 +207,29 @@ class QuotesController
         require_once 'app/views/quotes/stats.php';
     }
 
+    public function StatsKanban()
+    {
+        $user = $this->model->auth(4);
+
+        $costeo = $this->model->get('COUNT(q.id) as total', 'quotes q', "AND q.status = 'costeo'")->total;
+        $seguimiento = $this->model->get('COUNT(q.id) as total', 'quotes q', "AND q.status = 'seguimiento'")->total;
+        $seguimiento_amount = number_format($this->model->get('SUM(q.amount + q.aui) as total', 'quotes q',"AND q.status = 'seguimiento'")->total / 1000, 0);
+        $ganadas = $this->model->get('COUNT(q.id) as total', 'quotes q', "AND q.status = 'ganada'")->total;
+        $ganadas_amount = number_format($this->model->get('SUM(q.amount + q.aui) as total', 'quotes q',"AND q.status = 'ganada'")->total / 1000, 0);
+        $perdidas = $this->model->get('COUNT(q.id) as total', 'quotes q', "AND q.status = 'perdida'")->total;
+        $perdidas_amount = number_format($this->model->get('SUM(q.amount + q.aui) as total', 'quotes q',"AND q.status = 'perdida'")->total / 1000, 0);
+
+        // Renderizar vista
+        require_once 'app/views/quotes/stats-kanban.php';
+    }
+
     public function Detail()
     {
         $user = $this->model->auth(4);
 
         if (!empty($_REQUEST['id'])) {
-            $filters = "and id = " . $_REQUEST['id'];
-            $id = $this->model->get('*', 'quotes', $filters);
+            $filters = "and q.id = " . $_REQUEST['id'];
+            $id = $this->model->get('q.*,u.username, c.company', 'quotes q', $filters, "LEFT JOIN users u on q.user_id = u.id LEFT JOIN clients c on q.client_id = c.id");
         }
         require_once 'app/views/quotes/detail.php';
     }
