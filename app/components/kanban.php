@@ -72,7 +72,7 @@
     .then(data => {
       const columns = [
         { title: "Proyecto", field: "project", headerFilter: "input" },
-        { title: "Responsable", field: "user_id", headerFilter: "input" }
+        { title: "Cliente", field: "company", headerFilter: "input" }
       ];
 
       new Tabulator("#costeo", {

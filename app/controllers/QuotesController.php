@@ -141,7 +141,7 @@ class QuotesController
 
     public function KanbanData()
     {
-        echo json_encode($this->model->list('*','quotes'));
+        echo json_encode($this->model->list('q.*,u.username, c.company', 'quotes q','',"LEFT JOIN users u on q.user_id = u.id LEFT JOIN clients c on q.client_id = c.id"));
     }
 
 
