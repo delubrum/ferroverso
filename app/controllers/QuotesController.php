@@ -388,7 +388,7 @@ class QuotesController
         $date = $year . "-01-01";
 
         $quotes = $this->model->list(
-            "UPPER(status) as status, DATE_FORMAT(created_at, '%b') as month, COUNT(*) as total",
+            "status as status, DATE_FORMAT(created_at, '%b') as month, COUNT(*) as total",
             "quotes",
             "and YEAR(created_at) = '$date' GROUP BY created_at, status ORDER BY MONTH(created_at)",
             ""
@@ -400,9 +400,11 @@ class QuotesController
         foreach ($months as $month) {
             $quotes_by_month[$month] = [
                 'total'     => 0,
-                'ganados'   => 0,
-                'perdidos'  => 0,
-                'pendientes'=> 0
+                'costeo'    => 0,
+                'seguimiento' => 0,
+                'ganadas'   => 0,
+                'perdidas'  => 0,
+                'modificadas'=> 0
             ];
         }
 
@@ -413,12 +415,16 @@ class QuotesController
 
             $quotes_by_month[$month]['total'] += $cantidad;
 
-            if ($estado === 'APROBADA') {
-                $quotes_by_month[$month]['ganados'] += $cantidad;
-            } elseif (in_array($estado, ['RECHAZADA', 'REVALUADA'])) {
-                $quotes_by_month[$month]['perdidos'] += $cantidad;
+            if ($estado === 'ganada') {
+                $quotes_by_month[$month]['ganadas'] += $cantidad;
+            } elseif ($estado === 'costeo') {
+                $quotes_by_month[$month]['costeo'] += $cantidad;
+            } elseif ($estado === 'seguimiento') {
+                $quotes_by_month[$month]['seguimiento'] += $cantidad;
+            } elseif ($estado === 'perdida') {
+                $quotes_by_month[$month]['perdidas'] += $cantidad;
             } else {
-                $quotes_by_month[$month]['pendientes'] += $cantidad;
+                $quotes_by_month[$month]['modificadas'] += $cantidad;
             }
         }
 

@@ -21,6 +21,12 @@
 </head>
 
 <body>
+
+<div id="loading" style="display:none;pointer-events: none; position: absolute; z-index: 80; height: 100%; width: 100%; top: 0; left: 0; background-color: #f9fafb; text-align: center;">
+  <div style="height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: auto;">
+    <div style="width: 6rem; height: 6rem; background-repeat: no-repeat; background-position: center; background-image: url('app/assets/img/loader.gif'); background-size: contain; opacity: 0.9;"></div>
+  </div>
+</div>
      
     <div class="container">
     <div class="img">
@@ -62,6 +68,7 @@ document.addEventListener('submit', async (e) => {
     e.preventDefault();
     const loginForm = e.target;
     if (loginForm.checkValidity()) {
+        $('#loading').show();
         try {
             const formData = new FormData(loginForm);
             const response = await fetch("?c=Home&a=Index&m=Index", {
@@ -71,6 +78,7 @@ document.addEventListener('submit', async (e) => {
             if (response.ok) {
                 const data = await response.text();
                 if (data.trim() !== 'ok') {
+                    $('#loading').hide();
                     toastr.error('Error');
                     console.log('Error');
                 } else {
@@ -78,6 +86,7 @@ document.addEventListener('submit', async (e) => {
                 }
             }
         } catch (error) {
+            $('#loading').hide();
             console.error("failed");
         }
     }

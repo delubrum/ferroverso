@@ -21,8 +21,10 @@ class HomeController{
 			$filter = "and id = " . $_SESSION["id-APP"];
 			$user = $this->model->get('*','users',$filter);
 			}
-			$title = "Bienvenido a Sipec";
-			$content = 'app/components/page.php';
+			$tabulator = true;
+			$title = "Cotizaciones / Registro";
+			$button = 'Nueva Cotización';
+        	$content = 'app/components/kanban.php';
 			require_once 'app/views/index.php';
 		} else {
 			if (isset($_REQUEST['pass']) && $_REQUEST['pass'] !== '') {
