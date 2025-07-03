@@ -130,52 +130,49 @@
             </div>
 
             <div class="bg-white rounded-lg shadow-md overflow-hidden lg:col-span-3">
-<div class="w-full max-w-2xl mx-auto my-4">
-    <div class="relative flex justify-between items-center text-xs bg-white p-2">
-        <!-- Línea horizontal de fondo -->
+                <div class="w-full max-w-2xl mx-auto my-4">
+                    <div class="relative flex justify-between items-center text-xs bg-white p-2">
+                        <!-- Línea horizontal de fondo -->
 
-        <!-- Paso 1 -->
-        <div class="flex items-center gap-2 bg-white px-2 z-10 w-1/3">
-            <div class="w-10 h-10 flex items-center justify-center bg-purple-600 rounded-full shadow-md border-2 border-white hover:scale-105 transition-transform">
-                <i class="ri-file-search-line text-white text-lg"></i>
-            </div>
-            <div class="leading-snug">
-                <p class="font-semibold text-gray-800 text-sm">Costeo</p>
-                <p class="text-gray-500 text-xs"><?= date("Y-m-d", strtotime($id->created_at)) ?></p>
-            </div>
-        </div>
+                        <!-- Paso 1 -->
+                        <div class="flex items-center gap-2 bg-white px-2 z-10 w-1/3">
+                            <div class="w-10 h-10 flex items-center justify-center bg-purple-600 rounded-full shadow-md border-2 border-white hover:scale-105 transition-transform">
+                                <i class="ri-file-search-line text-white text-lg"></i>
+                            </div>
+                            <div class="leading-snug">
+                                <p class="font-semibold text-gray-800 text-sm">Costeo</p>
+                                <p class="text-gray-500 text-xs"><?= date("Y-m-d", strtotime($id->created_at)) ?></p>
+                            </div>
+                        </div>
 
-        <?php if ($id->status != 'costeo') : ?>
-        <!-- Paso 2 -->
-        <div class="flex items-center gap-2 bg-white px-2 z-10 w-1/3">
-            <div class="w-10 h-10 flex items-center justify-center bg-pink-600 rounded-full shadow-md border-2 border-white hover:scale-105 transition-transform">
-                <i class="ri-road-map-line text-white text-lg"></i>
-            </div>
-            <div class="leading-snug">
-                <p class="font-semibold text-gray-800 text-sm">Seguimiento</p>
-                <p class="text-gray-500 text-xs"><?= date("Y-m-d", strtotime($id->quote_at)) ?></p>
-            </div>
-        </div>
-        <?php endif; ?>
+                        <?php if ($id->status != 'costeo') : ?>
+                        <!-- Paso 2 -->
+                        <div class="flex items-center gap-2 bg-white px-2 z-10 w-1/3">
+                            <div class="w-10 h-10 flex items-center justify-center bg-pink-600 rounded-full shadow-md border-2 border-white hover:scale-105 transition-transform">
+                                <i class="ri-road-map-line text-white text-lg"></i>
+                            </div>
+                            <div class="leading-snug">
+                                <p class="font-semibold text-gray-800 text-sm">Seguimiento</p>
+                                <p class="text-gray-500 text-xs"><?= date("Y-m-d", strtotime($id->quote_at)) ?></p>
+                            </div>
+                        </div>
+                        <?php endif; ?>
 
-        <?php if ($id->status != 'costeo' && $id->status != 'seguimiento') : ?>
-        <!-- Paso 3 -->
-        <div class="flex items-center gap-2 bg-white px-2 z-10 w-1/3">
-            <div class="w-10 h-10 flex items-center justify-center bg-<?= ($id->status == 'ganada') ? 'green' : 'red' ?>-600 rounded-full shadow-md border-2 border-white hover:scale-105 transition-transform">
-                <i class="<?= ($id->status == 'ganada') ? 'ri-checkbox-circle-line' : 'ri-close-circle-line' ?> text-white text-lg"></i>
-            </div>
-            <div class="leading-snug">
-                <p class="font-semibold text-gray-800 text-sm"><?= ucwords($id->status) ?></p>
-                <p class="text-gray-500 text-xs"><?= date("Y-m-d", strtotime($id->status_at)) ?></p>
-            </div>
-        </div>
-        <?php endif; ?>
-    </div>
-</div>
-
-
-            
-                <div class="flex border-b border-gray-200 bg-white px-3 flex-wrap">
+                        <?php if ($id->status != 'costeo' && $id->status != 'seguimiento') : ?>
+                        <!-- Paso 3 -->
+                        <div class="flex items-center gap-2 bg-white px-2 z-10 w-1/3">
+                            <div class="w-10 h-10 flex items-center justify-center bg-<?= ($id->status == 'ganada') ? 'green' : 'red' ?>-600 rounded-full shadow-md border-2 border-white hover:scale-105 transition-transform">
+                                <i class="<?= ($id->status == 'ganada') ? 'ri-checkbox-circle-line' : 'ri-close-circle-line' ?> text-white text-lg"></i>
+                            </div>
+                            <div class="leading-snug">
+                                <p class="font-semibold text-gray-800 text-sm"><?= ucwords($id->status) ?></p>
+                                <p class="text-gray-500 text-xs"><?= date("Y-m-d", strtotime($id->status_at)) ?></p>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="flex border-b border-gray-200 bg-white px-3 flex-wrap ">
 
                     <div class="tab active text-gray-800 border-gray-800 border-b-2 px-3 py-2.5 cursor-pointer font-medium text-gray-500 transition-colors duration-200 hover:text-gray-800 whitespace-nowrap"
                         hx-get="?c=Quotes&a=DetailTab&tab=comments&id=<?= $id->id ?>"

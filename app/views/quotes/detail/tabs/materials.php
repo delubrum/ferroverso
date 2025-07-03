@@ -46,6 +46,7 @@
             </tr>
         </thead>
         <!-- <tbody id="search-results" 
+            class="overflow-auto max-h-[50vh] space-y-4 p-2"
             hx-get="?c=Quotes&a=GetMaterials&id=<?= $id->id ?>"
             hx-trigger="load"
             hx-target="this">

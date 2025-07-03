@@ -35,6 +35,7 @@
                 </tr>
             </thead>
             <tbody id="search-results" 
+                class="overflow-auto max-h-[50vh] space-y-4 p-2"
                 hx-get="?c=Assets&a=GetFiles&id=<?= $id->asset_id ?>"
                 hx-trigger="load"
                 hx-target="this">

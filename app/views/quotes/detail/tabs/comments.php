@@ -36,9 +36,11 @@
         <span>Buscando...</span>
     </div>
 
-    <div id="search-results" 
+    <div id="search-results"
+        class="overflow-auto max-h-[50vh] space-y-4 p-2"
         hx-get="?c=Quotes&a=GetComments&id=<?= $id->id ?>"
         hx-trigger="load, refresh"
-        hx-target="this">
+        hx-target="this"
+        >
     </div>
 </div>
