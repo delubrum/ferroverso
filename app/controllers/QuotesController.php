@@ -284,6 +284,7 @@ class QuotesController
                 $id = $_POST['id'];
                 $item->amount = $this->model->get('amount','quotes'," and id = $id")->amount;
                 $item->aui = $this->model->get('aui','quotes'," and id = $id")->aui;
+                $item->quote_at = $this->model->get('quote_at','quotes'," and id = $id")->quote_at;
             }
             if ($_POST['status'] == 'seguimiento') {
                 $item->quote_at = date("Y-m-d H:i:s");
