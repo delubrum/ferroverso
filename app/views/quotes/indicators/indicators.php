@@ -362,10 +362,23 @@
                     <div class="indicator-icon">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
-                    Estado
+                    Estado (Cantidad)
                 </h2>
                 <div class="chart-container">
                     <?php require_once 'indicator-1.php'; ?>
+                </div>
+            </div>
+
+            <!-- Indicador 2 -->
+            <div class="indicator" id="indicator-2">
+                <h2 class="indicator-title">
+                    <div class="indicator-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    Estado ($)
+                </h2>
+                <div class="chart-container">
+                    <?php require_once 'indicator-2.php'; ?>
                 </div>
             </div>
 

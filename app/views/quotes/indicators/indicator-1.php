@@ -15,7 +15,21 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($months as $month): ?>
+                <?php
+                $totals = [
+                    'total' => 0,
+                    'costeo' => 0,
+                    'seguimiento' => 0,
+                    'ganadas' => 0,
+                    'perdidas' => 0,
+                    'modificadas' => 0,
+                ];
+
+                foreach ($months as $month): 
+                    foreach ($totals as $key => &$val) {
+                        $val += $quotes_by_month[$month][$key];
+                    }
+                ?>
                     <tr class="border-b">
                         <td class="px-4 py-2"><?= ucfirst($month) ?></td>
                         <td class="px-4 py-2 text-center"><?= $quotes_by_month[$month]['total'] ?></td>
@@ -25,7 +39,33 @@
                         <td class="px-4 py-2 text-center text-red-600"><?= $quotes_by_month[$month]['perdidas'] ?></td>
                         <td class="px-4 py-2 text-center text-yellow-600"><?= $quotes_by_month[$month]['modificadas'] ?></td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endforeach; unset($val); 
+
+                $month_count = count($months);
+                $averages = array_map(fn($val) => round($val / $month_count, 2), $totals);
+                ?>
+
+                <!-- Fila Promedio -->
+                <tr class="font-semibold bg-gray-100 border-t">
+                    <td class="px-4 py-2">Promedio</td>
+                    <td class="px-4 py-2 text-center"><?= $averages['total'] ?></td>
+                    <td class="px-4 py-2 text-center text-gray-600"><?= $averages['costeo'] ?></td>
+                    <td class="px-4 py-2 text-center text-blue-600"><?= $averages['seguimiento'] ?></td>
+                    <td class="px-4 py-2 text-center text-green-600"><?= $averages['ganadas'] ?></td>
+                    <td class="px-4 py-2 text-center text-red-600"><?= $averages['perdidas'] ?></td>
+                    <td class="px-4 py-2 text-center text-yellow-600"><?= $averages['modificadas'] ?></td>
+                </tr>
+
+                <!-- Fila Total -->
+                <tr class="font-bold bg-gray-200 border-t">
+                    <td class="px-4 py-2">Total</td>
+                    <td class="px-4 py-2 text-center"><?= $totals['total'] ?></td>
+                    <td class="px-4 py-2 text-center text-gray-600"><?= $totals['costeo'] ?></td>
+                    <td class="px-4 py-2 text-center text-blue-600"><?= $totals['seguimiento'] ?></td>
+                    <td class="px-4 py-2 text-center text-green-600"><?= $totals['ganadas'] ?></td>
+                    <td class="px-4 py-2 text-center text-red-600"><?= $totals['perdidas'] ?></td>
+                    <td class="px-4 py-2 text-center text-yellow-600"><?= $totals['modificadas'] ?></td>
+                </tr>
             </tbody>
         </table>
     </div>

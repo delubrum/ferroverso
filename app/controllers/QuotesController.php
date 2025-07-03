@@ -28,6 +28,7 @@ class QuotesController
             { "title": "Valor", "field": "amount", headerHozAlign: "center", headerFilter:"input", hozAlign:"right", },
             { "title": "AUI", "field": "aui", headerHozAlign: "center", headerFilter:"input", hozAlign:"right", },
             { "title": "Valor Total", "field": "total", headerHozAlign: "center", headerFilter:"input", hozAlign:"right", },
+            { "title": "Fecha Estado", "field": "status_at", headerHozAlign: "center", headerFilter: customDateRangeFilter, headerFilterFunc: customDateFilterFunc, headerFilterLiveFilter: false, },
             { "title": "Estado", "field": "status", headerHozAlign: "center", headerFilter:"list", hozAlign:"center", headerFilterParams:{ values: {"costeo": "Costeo", "seguimiento": "Seguimiento", "modificada": "Modificada", "ganada": "Ganada", "perdida": "Perdida"}, clearable:true}, },
         ]';
         
@@ -65,6 +66,7 @@ class QuotesController
             'project' => 'q.project',
             'amount' => 'q.amount',
             'aui' => 'q.aui',
+            'status_at' => 'q.status_at',
             'status' => 'q.status',
         ];
 
@@ -81,7 +83,7 @@ class QuotesController
 
                 $dbField = $fieldMap[$field];
 
-                if ($field === 'created_at' && strpos($value, ' to ') !== false) {
+                if (($field === 'created_at' || $field === 'status_at') && strpos($value, ' to ') !== false) {
                     list($from, $to) = explode(' to ', $value);
                     $where .= " AND DATE($dbField) BETWEEN '$from' AND '$to'";
                 } else {
@@ -128,6 +130,7 @@ class QuotesController
                 'amount' => '$' . number_format($r->amount, 0),
                 'aui' => '$' . number_format($r->aui, 0),
                 'total' => '$' . number_format($r->amount + $r->aui, 0),
+                'status_at' => $r->status_at,
                 'status' => ucwords($r->status),
             ];
         }
@@ -396,62 +399,92 @@ class QuotesController
         // Inicializar array de resultados con todos los meses
         foreach ($months as $month) {
             $quotes_by_month[$month] = [
-                'total'        => 0,
-                'costeo'       => 0,
-                'seguimiento'  => 0,
-                'ganadas'      => 0,
-                'perdidas'     => 0,
-                'modificadas'  => 0
+                'total' => 0,
+                'total_value' => 0,
+
+                'costeo' => 0,
+                'costeo_value' => 0,
+
+                'seguimiento' => 0,
+                'seguimiento_value' => 0,
+
+                'ganadas' => 0,
+                'ganadas_value' => 0,
+
+                'perdidas' => 0,
+                'perdidas_value' => 0,
+
+                'modificadas' => 0,
+                'modificadas_value' => 0
             ];
         }
 
         // Total: por created_at
         $quotes = $this->model->list(
-            "DATE_FORMAT(created_at, '%b') as month, COUNT(*) as total",
+            "DATE_FORMAT(created_at, '%b') as month, 
+            COUNT(*) as total, 
+            SUM(COALESCE(amount,0) + COALESCE(aui,0)) as total_value",
             "quotes",
             "AND YEAR(created_at) = '$year' GROUP BY month",
             ""
         );
         foreach ($quotes as $q) {
             $quotes_by_month[$q->month]['total'] = (int) $q->total;
+            $quotes_by_month[$q->month]['total_value'] = (float) $q->total_value;
         }
 
         // Costeo: por created_at
         $costeo = $this->model->list(
-            "DATE_FORMAT(created_at, '%b') as month, COUNT(*) as total",
+            "DATE_FORMAT(created_at, '%b') as month, 
+            COUNT(*) as total, 
+            SUM(COALESCE(amount,0) + COALESCE(aui,0)) as total_value",
             "quotes",
             "AND status = 'costeo' AND YEAR(created_at) = '$year' GROUP BY month",
             ""
         );
         foreach ($costeo as $q) {
             $quotes_by_month[$q->month]['costeo'] = (int) $q->total;
+            $quotes_by_month[$q->month]['costeo_value'] = (float) $q->total_value;
         }
 
         // Seguimiento: por quote_at
         $seguimiento = $this->model->list(
-            "DATE_FORMAT(quote_at, '%b') as month, COUNT(*) as total",
+            "DATE_FORMAT(quote_at, '%b') as month, 
+            COUNT(*) as total, 
+            SUM(COALESCE(amount,0) + COALESCE(aui,0)) as total_value",
             "quotes",
             "AND status = 'seguimiento' AND quote_at IS NOT NULL AND YEAR(quote_at) = '$year' GROUP BY month",
             ""
         );
         foreach ($seguimiento as $q) {
             $quotes_by_month[$q->month]['seguimiento'] = (int) $q->total;
+            $quotes_by_month[$q->month]['seguimiento_value'] = (float) $q->total_value;
         }
 
-        // Estados finales: por status_at
+        // Estados finales: ganadas, perdidas, modificadas por status_at
         $finales = $this->model->list(
-            "DATE_FORMAT(status_at, '%b') as month, 
+            "DATE_FORMAT(status_at, '%b') as month,
             SUM(status = 'ganada') as ganadas,
+            SUM(CASE WHEN status = 'ganada' THEN COALESCE(amount,0) + COALESCE(aui,0) ELSE 0 END) as ganadas_value,
+
             SUM(status = 'perdida') as perdidas,
-            SUM(status = 'modificada') as modificadas",
+            SUM(CASE WHEN status = 'perdida' THEN COALESCE(amount,0) + COALESCE(aui,0) ELSE 0 END) as perdidas_value,
+
+            SUM(status = 'modificada') as modificadas,
+            SUM(CASE WHEN status = 'modificada' THEN COALESCE(amount,0) + COALESCE(aui,0) ELSE 0 END) as modificadas_value",
             "quotes",
             "AND status IN ('ganada','perdida','modificada') AND YEAR(status_at) = '$year' GROUP BY month",
             ""
         );
         foreach ($finales as $q) {
             $quotes_by_month[$q->month]['ganadas'] = (int) $q->ganadas;
+            $quotes_by_month[$q->month]['ganadas_value'] = (float) $q->ganadas_value;
+
             $quotes_by_month[$q->month]['perdidas'] = (int) $q->perdidas;
+            $quotes_by_month[$q->month]['perdidas_value'] = (float) $q->perdidas_value;
+
             $quotes_by_month[$q->month]['modificadas'] = (int) $q->modificadas;
+            $quotes_by_month[$q->month]['modificadas_value'] = (float) $q->modificadas_value;
         }
 
         require_once 'app/views/quotes/indicators/indicators.php';
