@@ -1,7 +1,10 @@
 <div class="w-[95%] sm:w-[70%] bg-white p-4 rounded-lg shadow-lg relative z-50">
     <!-- Close Button (X) in Top-Right Corner -->
-    <button id="closeNewModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-gray-900 hover:text-gray-700">
-        <i class="ri-close-line text-2xl"></i>
+    <button 
+        class="absolute top-0 right-0 m-3 text-gray-900 hover:text-gray-700"
+        @click="showModal = !showModal; document.getElementById('myModal').innerHTML = '';"
+    >
+      <i class="ri-close-line text-2xl"></i>
     </button>
     <h1 class="mb-4 text-gray-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold"> <?php echo (isset($id)) ? 'Editar' : 'Nuevo'; ?> Cliente <span></h1>
     <form  id="newForm" 

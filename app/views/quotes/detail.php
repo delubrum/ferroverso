@@ -1,6 +1,9 @@
 <div class="w-[95%] sm:w-[95%] rounded-lg shadow-lg relative z-50 bg-gray-50 text-gray-800 text-sm leading-relaxed" hx-boost="true">
     <!-- Close Button (X) in Top-Right Corner -->
-    <button @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-gray-900 hover:text-gray-700">
+    <button 
+        class="absolute top-0 right-0 m-3 text-gray-900 hover:text-gray-700"
+        @click="showModal = !showModal; document.getElementById('myModal').innerHTML = '';"
+    >
         <i class="ri-close-line text-2xl"></i>
     </button>
 <div class="" >

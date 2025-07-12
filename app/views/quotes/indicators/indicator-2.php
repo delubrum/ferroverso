@@ -31,7 +31,7 @@
                 <tr class="border-b">
                     <td class="px-4 py-2"><?= ucfirst($month) ?></td>
                     <td class="px-4 py-2 text-center">
-                        $<?= number_format($quotes_by_month[$month]['total_value'], 0, ',', '.') ?>
+                        $<?= number_format($quotes_by_month[$month]['costeo_value'] + $quotes_by_month[$month]['seguimiento_value'] + $quotes_by_month[$month]['ganadas_value'] + $quotes_by_month[$month]['perdidas_value'] + $quotes_by_month[$month]['modificadas_value'], 0, ',', '.') ?>
                     </td>
                     <td class="px-4 py-2 text-center text-gray-600">
                         $<?= number_format($quotes_by_month[$month]['costeo_value'], 0, ',', '.') ?>
